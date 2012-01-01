@@ -3,18 +3,20 @@ package com.kokakiwi.android.newyeardroid;
 import java.io.IOException;
 import java.util.TimerTask;
 
-import net.sf.atomicdate.Date;
+import net.sf.atomicdate.Client;
 
 public class SynchronizerTimer extends TimerTask
 {
+    public final static String         NTP_SERVER = "0.fr.pool.ntp.org";
+    
     private final NewYearDroidActivity activity;
-    private final Date                 synchro;
-    private long                       lastUpdate = 0;
+    private final Client               synchro;
+    private long                       offset     = 0;
     
     public SynchronizerTimer(NewYearDroidActivity activity) throws IOException
     {
         this.activity = activity;
-        synchro = new Date("0.fr.pool.ntp.org");
+        synchro = new Client();
     }
     
     @Override
@@ -27,8 +29,9 @@ public class SynchronizerTimer extends TimerTask
     {
         try
         {
-            synchro.synchronize();
-            lastUpdate = System.currentTimeMillis();
+            offset = synchro.getOffset(NTP_SERVER, Client.DEFAULT_SNTP_PORT);
+            System.out.println(synchro.getOffset(NTP_SERVER,
+                    Client.DEFAULT_SNTP_PORT));
         }
         catch (IOException e)
         {
@@ -36,14 +39,19 @@ public class SynchronizerTimer extends TimerTask
         }
     }
     
+    @Override
+    public boolean cancel()
+    {
+        synchro.close();
+        
+        return super.cancel();
+    }
+    
     public long currentTimeMillis()
     {
-        long current = System.currentTimeMillis();
-        long diff = current - lastUpdate;
+        long current = System.currentTimeMillis() + offset;
         
-        long now = synchro.getTime() + diff;
-        
-        return now;
+        return current;
     }
     
     public java.util.Date getDate()
@@ -56,7 +64,7 @@ public class SynchronizerTimer extends TimerTask
         return activity;
     }
     
-    public Date getSynchro()
+    public Client getSynchro()
     {
         return synchro;
     }

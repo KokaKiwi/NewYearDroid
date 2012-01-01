@@ -172,6 +172,18 @@ public class Service extends TimerTask
         return System.currentTimeMillis() + offset;
     }
     
+    /**
+     * Return the network date.
+     * 
+     * @author Koka El Kiwi
+     * @return
+     * @throws IOException
+     */
+    public java.util.Date getDate() throws IOException
+    {
+        return new java.util.Date(getTime());
+    }
+    
     // See TimerTask for details.
     @Override
     public void run()

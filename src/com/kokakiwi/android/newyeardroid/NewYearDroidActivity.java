@@ -15,7 +15,8 @@ public class NewYearDroidActivity extends Activity
     private NewYearTimer      task;
     private SynchronizerTimer synchronizer;
     
-    private final Timer       timer = new Timer("NewYearTimer", true);
+    private final Timer       timer1 = new Timer("NewYearTimerUpdate", true);
+    private final Timer       timer2 = new Timer("NewYearTimerSync", true);
     
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -31,8 +32,8 @@ public class NewYearDroidActivity extends Activity
             
             synchronizer.sync();
             
-            timer.scheduleAtFixedRate(task, 0L, 1000L);
-            timer.scheduleAtFixedRate(synchronizer, 0L, 30000L);
+            timer1.scheduleAtFixedRate(task, 0L, 1000L);
+            timer2.scheduleAtFixedRate(synchronizer, 0L, 30000L);
         }
         catch (IOException e)
         {
@@ -44,7 +45,8 @@ public class NewYearDroidActivity extends Activity
     @Override
     protected void onDestroy()
     {
-        timer.cancel();
+        timer1.cancel();
+        timer2.cancel();
         
         super.onDestroy();
     }
@@ -62,10 +64,5 @@ public class NewYearDroidActivity extends Activity
     public SynchronizerTimer getSynchronizer()
     {
         return synchronizer;
-    }
-    
-    public Timer getTimer()
-    {
-        return timer;
     }
 }
