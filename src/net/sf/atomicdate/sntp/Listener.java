@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketTimeoutException;
 
 /**
  * An SNTP message listener. The method {@link #onMessage(Message, long)} is
@@ -124,7 +125,14 @@ public abstract class Listener extends Thread
                 {
                     System.err
                             .println("AtomicDate: error receiving a message.");
-                    ioe.printStackTrace(System.err);
+                    if (ioe instanceof SocketTimeoutException)
+                    {
+                        System.err.println("Time out.");
+                    }
+                    else
+                    {
+                        ioe.printStackTrace(System.err);
+                    }
                 }
             }
         }

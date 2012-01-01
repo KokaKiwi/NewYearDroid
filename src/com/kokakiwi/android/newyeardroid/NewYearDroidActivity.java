@@ -48,6 +48,9 @@ public class NewYearDroidActivity extends Activity
         timer1.cancel();
         timer2.cancel();
         
+        task.cancel();
+        synchronizer.cancel();
+        
         super.onDestroy();
     }
     

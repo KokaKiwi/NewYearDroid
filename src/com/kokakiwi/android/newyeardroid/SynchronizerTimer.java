@@ -7,7 +7,7 @@ import net.sf.atomicdate.Client;
 
 public class SynchronizerTimer extends TimerTask
 {
-    public final static String         NTP_SERVER = "0.fr.pool.ntp.org";
+    public final static String         NTP_SERVER = "fr.pool.ntp.org";
     
     private final NewYearDroidActivity activity;
     private final Client               synchro;
